@@ -40,26 +40,27 @@ class User(object):
             return cls(**user_data)
 
     @classmethod
-    def login_valid(cls, email, password):
-        user = cls.from_mongodb_by_email(email=email)
-        if user is not None:
-            return user.password == password
-        raise IncorrectPasswordException("Email {} does not match given password.".format(email))
-
-    @classmethod
     def register(cls, email, password):
         user = cls.from_mongodb_by_email(email=email)
         if user is not None:
-            raise UserAlreadyExistsException("User {} is already registered.".format(email))
+            return False
+            # raise UserAlreadyExistsException("User {} is already registered.".format(email))
         new_user = cls(email=email, password=password)
         new_user.save_to_mongodb()
         flask.session[constants.EMAIL] = email
         return True
 
+    @classmethod
+    def login_valid(cls, email, password):
+        user = cls.from_mongodb_by_email(email=email)
+        if user is not None:
+            return user.password == password
+        # raise UserDoesNotExistException("Email {} does not match a registered user. Please register.".format(email))
+
     @staticmethod
-    def login(email, password):
-        if User.login_valid(email, password):
-            flask.session[constants.EMAIL] = email
+    def login(email):
+        # if User.login_valid(email, password):
+        flask.session[constants.EMAIL] = email
 
     @staticmethod
     def logout():
@@ -95,5 +96,5 @@ class UserAlreadyExistsException(Exception):
     """ Exception for if you try to register an existing user. """
 
 
-class IncorrectPasswordException(Exception):
-    """ Exception for when given email and password do not match """
+class UserDoesNotExistException(Exception):
+    """ Exception for when given email is not in the database but login was attempted."""

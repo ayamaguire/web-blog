@@ -16,12 +16,12 @@ def initialize_database():
     database.Database.initialize()
 
 
-@web_app.route('/')
+@web_app.route('/login')
 def hello_world():
     return flask.render_template('login.html')
 
 
-@web_app.route('/login', methods=['POST'])
+@web_app.route('/auth/login', methods=['POST'])
 def login():
     email = flask.request.form[constants.EMAIL]
     password = flask.request.form[constants.PASSWORD]
@@ -34,7 +34,7 @@ def login():
         return flask.render_template('register.html')
 
 
-@web_app.route('/register', methods=['POST'])
+@web_app.route('/auth/register', methods=['POST'])
 def register():
     email = flask.request.form[constants.EMAIL]
     password = flask.request.form[constants.PASSWORD]

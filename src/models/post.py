@@ -36,7 +36,7 @@ class Post(object):
         # post_data = post_data[0]
         return cls(**post_data)
 
-    @staticmethod
-    def from_blog(blog_id):
-        return [post for post in database.Database.find(collection=constants.POSTS_COLLECTION,
-                                                        query={constants.SELF_ID: blog_id})]
+    @classmethod
+    def from_blog(cls, blog_id):
+        return [cls(**post) for post in database.Database.find(collection=constants.POSTS_COLLECTION,
+                                                               query={constants.BLOG_ID: blog_id})]

@@ -3,6 +3,7 @@ import uuid
 
 from src.common import constants
 from src.common import database
+from src.models import blog
 from src.models import user
 
 
@@ -16,9 +17,19 @@ def initialize_database():
     database.Database.initialize()
 
 
+@web_app.route('/home')
+def home_template():
+    return flask.render_template('home.html')
+
+
 @web_app.route('/login')
-def hello_world():
+def login_template():
     return flask.render_template('login.html')
+
+
+@web_app.route('/register')
+def register_template():
+    return flask.render_template('register.html')
 
 
 @web_app.route('/auth/login', methods=['POST'])
@@ -47,5 +58,23 @@ def register():
         return flask.render_template('register.html')
 
 
+@web_app.route('/blogs/<string:user_id>')
+@web_app.route('/blogs')
+def user_blogs(user_id=None):
+    if user_id is None:
+        active_user = user.User.from_mongodb_by_email(email=flask.session[constants.EMAIL])
+    else:
+        active_user = user.User.from_mongodb_by_id(_id=user_id)
+    active_blogs = active_user.get_blogs()
+    return flask.render_template('user_blogs.html', email=active_user.email, blogs=active_blogs)
+
+
+@web_app.route('/posts/<string:blog_id>')
+def blog_posts(blog_id):
+    active_blog = blog.Blog.from_mongodb_by_blog_id(blog_id=blog_id)
+    posts = active_blog.posts()
+    return flask.render_template('posts.html', posts=posts, blog_title=active_blog.title)
+
+
 if __name__ == '__main__':
-    web_app.run()
+    web_app.run(port=8000, debug=True)

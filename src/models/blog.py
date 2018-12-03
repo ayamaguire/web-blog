@@ -22,7 +22,7 @@ class Blog(object):
                              )
         new_post.save_to_mongodb()
 
-    def get_posts(self):
+    def posts(self):
         return post.Post.from_blog(blog_id=self._id)
 
     def save_to_mongodb(self):
@@ -49,4 +49,4 @@ class Blog(object):
     def from_mongodb_by_author_id(cls, author_id):
         blogs = database.Database.find(collection=constants.BLOGS_COLLECTION,
                                        query={constants.AUTHOR_ID: author_id})
-        return [cls(**blog) for blog in blogs]
+        return [cls(**blog_data) for blog_data in blogs]

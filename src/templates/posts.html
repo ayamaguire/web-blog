@@ -4,18 +4,32 @@
 
     <h2>
         {{ blog_title }}
+        <br>
+
+        <a href="/posts/new/{{ blog_id }}">
+            <button class="btn btn-primary">
+            Click here to make a new post.
+            </button>
+        </a>
+        <hr>
     </h2>
-    {% for blog_post in posts %}
-    <h3>
-        {{ blog_post.title }} created {{ blog_post.date }}
-    </h3>
+    {% if posts|length > 0 %}
 
-    <p>
-        {{ blog_post.content }}
-    </p>
-    <hr>
+        {% for blog_post in posts %}
+        <h3>
+            {{ blog_post.title }} created {{ blog_post.date }}
+        </h3>
 
-    {% endfor %}
+        <p>
+            {{ blog_post.content }}
+        </p>
+        <hr>
 
+        {% endfor %}
+
+    {% else %}
+        <h4> There are no posts to display!</h4>
+
+    {% endif %}
 </div>
 {% endblock %}

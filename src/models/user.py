@@ -34,9 +34,8 @@ class User(object):
     @classmethod
     def from_mongodb_by_id(cls, _id):
         user_data = database.Database.find_one(collection=constants.USERS_COLLECTION,
-                                               query={constants.USER_ID: _id})
+                                               query={constants.SELF_ID: _id})
         if user_data is not None:
-            # user_data = user_data[0]
             return cls(**user_data)
 
     @classmethod

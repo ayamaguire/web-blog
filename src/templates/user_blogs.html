@@ -1,19 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
+    <h1>
+        <text>Welcome {{ email }}!</text>
+    </h1>
 <div class="container">
-    <h2>
-        {{ email }}'s blogs: <br>
-    </h2>
+    <a href="/blogs/new">
+        <button class="btn btn-primary">
+        Click here to make a new blog.
+        </button>
+    </a>
+    {% if blogs|length > 0 %}
+        <h2>
+            {{ email }}'s blogs: <br>
+        </h2>
 
-    {% for blog in blogs %}
-    <h3>
-        <a href="/posts/{{ blog._id }}"> {{ blog.title }} </a>
-    </h3>
-    <p>
-        {{ blog.description }}
-    </p>
-    {% endfor %}
-    <hr>
+        {% for blog in blogs %}
+        <h3>
+            <a href="/posts/{{ blog._id }}"> {{ blog.title }} </a>
+        </h3>
+        <p>
+            {{ blog.description }}
+        </p>
+        {% endfor %}
+        <hr>
+    {% else %}
+    <h2> You have no blogs yet.</h2>
+    {% endif %}
 
 </div>
 {% endblock %}
